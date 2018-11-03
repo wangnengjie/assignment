@@ -19,7 +19,7 @@ int main(void)
 	{
 		printf("%5d", arr[i]);
 	}
-	
+	getchar();
 	return 0;
 }
 
