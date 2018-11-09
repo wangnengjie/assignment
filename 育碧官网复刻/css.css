@@ -71,7 +71,6 @@ body{
     align-items: flex-start;
 }
 .joinUbBox>div>p{
-    line-height: ;
     margin-top: 18px;
     margin-bottom: 5px;
     display: block;
@@ -142,8 +141,6 @@ body{
     height: 238px;
     width: 288px;
     overflow: initial;
-    -webkit-box-shadow: none;
-    box-shadow: none;
     background-color: #f8f8f8;
 }
 .CardGame {
@@ -154,9 +151,6 @@ body{
     overflow: hidden;
     cursor: pointer;
     -webkit-box-shadow: 0 4px 16px -5px rgba(50,50,93,.12), 0 2px 3px -1px rgba(0,0,0,.08);
-    -webkit-transition: all .25s cubic-bezier(.33,.63,.65,.99);
-    -o-transition: all .25s cubic-bezier(.33,.63,.65,.99);
-    transition: all .25s cubic-bezier(.33,.63,.65,.99);
     box-shadow: 0 4px 16px -5px rgba(50,50,93,.12), 0 2px 3px -1px rgba(0,0,0,.08);
     margin-bottom: 20px;
 }
@@ -173,11 +167,7 @@ body{
     width: 100%;
     -o-object-fit: contain;
     object-fit: contain;
-    -webkit-transition: -webkit-transform 1.8s cubic-bezier(.33,.63,.65,.99);
-    transition: -webkit-transform 1.8s cubic-bezier(.33,.63,.65,.99);
-    -o-transition: transform 1.8s cubic-bezier(.33,.63,.65,.99);
-    transition: transform 1.8s cubic-bezier(.33,.63,.65,.99);
-    transition: transform 1.8s cubic-bezier(.33,.63,.65,.99),-webkit-transform 1.8s cubic-bezier(.33,.63,.65,.99);
+
 }
 .CardGame__content-container {
     padding: 10.8px;
@@ -234,6 +224,7 @@ body{
     margin-top: 40px;
     width: 100vw;
     background-color: #f8f8f8;
+    z-index: 1;
 }
 .heading{
     position: relative;
@@ -303,3 +294,268 @@ body{
     overflow-y: hidden;
     scroll-behavior: smooth;
 }
+
+.carousel{
+    width: 100%;
+    overflow: hidden;
+}
+.show{
+    position: relative;
+}
+.cImg{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+.cImg.in{
+    z-index: 1;
+}
+.cImg.out{
+    pointer-events: none;
+}
+.topImg{
+    display: block;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    object-position: 50% 100%;
+}
+.cWords{
+    display: flex;
+    justify-content: space-between;
+    padding-top: calc(50px + 5% + 1.5vw);
+    padding-bottom: calc(9vw + 13vw);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    text-align: center;
+    -webkit-transition: opacity .4s cubic-bezier(.3,.8,.1,.95);
+    -o-transition: opacity .4s cubic-bezier(.3,.8,.1,.95);
+    transition: opacity .4s cubic-bezier(.3,.8,.1,.95);
+}
+.cWords.in{
+    opacity: 1;
+}
+.cWords.out{
+    opacity: 0;
+}
+.item1{
+    opacity: 0;
+    padding-bottom: 2vh;
+}
+.item2{
+    opacity: 0;
+    padding-top: 2vh;
+}
+.item1.active{
+    animation: 1.4s forwards alternate fadeIn;
+}
+.item2.active{
+    animation: 1.8s 1.1s forwards alternate fadeIn;
+    min-height: 16vh;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+}
+.itemH1{
+    font-size: 5.6vw;
+    line-height: .92;
+    font-family: UbisoftSans-Bold,UbisoftSans,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-shadow: 0 4px 18px rgba(0,0,0,.6);
+    color: white;
+}
+.itemH2{
+    margin: .2% 0 .6%;
+    font-size: 2.6vw;
+    line-height: 1;
+    font-family: UbisoftSans-Bold,UbisoftSans,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 0 4px 18px rgba(0,0,0,.6);
+}
+.itemP{
+    margin-top: .7%;
+    font-size: 1.52vw;
+    line-height: 1.3;
+    padding: 0 10%;
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 0 4px 18px rgba(0,0,0,.6);
+    color: white;
+}
+.cButtons{
+    z-index: 3;
+}
+.btn1{
+    box-shadow: 0 4px 18px rgba(0,0,0,.6);
+    padding: 14.04px 10.8px 14.04px 10.8px;
+    font-size: 16.2px;
+    border: none;
+}
+.btn2{
+    border: 1px solid #fff;
+    background: transparent;
+    text-shadow: 0 4px 18px rgba(0,0,0,.6);
+    margin-left: 10px;
+    padding: 14.04px 10.8px 14.04px 10.8px;
+}
+.cButtons a{
+    display: inline-block;
+    min-width: 182px;
+    margin-top: 0;
+    font-family: UbisoftSans,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    color: #fff;
+    outline: none;
+    border-radius: 30px;
+    transition: opacity .25s cubic-bezier(.3,.8,.1,.95);
+}
+.btn2.red:hover{
+    color: rgb(150, 15, 15);
+}
+.btn2.purple:hover{
+    color:rgb(209, 86, 229)
+}
+.position{
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    pointer-events: none;
+    object-fit: cover;
+    object-position: 50% 100%;
+}
+.btn2.orange:hover{
+    color:rgb(248, 79, 32);
+}
+.btn2.blue:hover{
+    color:rgb(3, 49, 106)
+}
+.btn2.color1:hover{
+    color: rgb(255, 126, 0);
+}
+.btn2.color2:hover{
+    color:rgb(142, 229, 63);
+}
+.btn2.color3:hover{
+    color:rgb(237, 181, 58);
+}
+.btn2.color4:hover{
+    color:rgb(224, 151, 18);
+}
+.btn2.color5:hover{
+    color: rgb(254, 122, 22);
+}
+.btn2.color6:hover{
+    color:rgb(177, 81, 43);
+}
+.btn2.color7:hover{
+    color: rgb(243, 157, 38);
+}
+.topImg.in{
+    transition: opacity .4s cubic-bezier(.3,.8,.1,.95);
+    opacity: 1;
+}
+.topImg.out{
+    transition: opacity 1.2s cubic-bezier(.3,.8,.1,.95);
+    opacity: 0;
+}
+
+.slideNav{
+    bottom: 9vw;
+    height: 13vw;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+}
+.slideLogo{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+.logoBox{
+    position: relative;
+    left: 0;
+    display: flex;
+    align-items: flex-end;
+    white-space: nowrap;
+}
+.container{
+    width: 17vw;
+    position: relative;
+    display: inline-block;
+}
+.containerImg{
+    display: block;
+    padding: 0 10%;
+    position: relative;
+    width: 100%;
+    height: auto;
+    opacity: 1;
+    transform: scale(.8) translateY(7%);
+}
+.containerImg.hidden{
+    opacity: 0;
+}
+.containerImg.selected{
+    transform: scale(1.08) translateY(-15%);
+}
+.underline{
+    height: 4px;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 16%;
+    right: 16%;
+    opacity: 0;
+}
+.underline.selected{
+    opacity: 1;
+    transform: scale(1.08) translateY(-15%);
+}
+.transitioning{
+    transition: all 0.25s;
+    -webkit-transform: translate(-17vw)  scale(.8) translateY(7%);
+    -moz-transform: translate(-17vw)  scale(.8) translateY(7%);;
+    -ms-transform: translate(-17vw) scale(.8) translateY(7%);
+    -o-transform: translate(-17vw) scale(.8) translateY(7%);
+    transform: translate(-17vw) scale(.8) translateY(7%);
+}
+.underline.selected.transitioning{
+    transition: all 0.25s;
+    -webkit-transform: translate(-17vw);
+    -moz-transform: translate(-17vw);
+    -ms-transform: translate(-17vw);
+    -o-transform: translate(-17vw);
+    transform: translate(-17vw) scale(1.08) translateY(-15%);
+}
+.containerImg.selected.transitioning{
+    transition: all 0.25s;
+    -webkit-transform: translate(-17vw);
+    -moz-transform: translate(-17vw);
+    -ms-transform: translate(-17vw);
+    -o-transform: translate(-17vw);
+    transform: translate(-17vw) scale(1.08) translateY(-15%);
+}
+.lazy{
+    width: 100%;
+}
+

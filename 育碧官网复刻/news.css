@@ -1,0 +1,41 @@
+.newsBody{
+    margin: 0 auto 0 auto;
+    padding: 73.44px 12px 41.04px 12px;
+}
+.newsBody>h1{
+    padding-bottom: 10.8px;
+    text-align: center;
+}
+.topOfNews{
+    padding-bottom: 30px;
+}
+.topOfNews ul{
+    display: flex;
+    list-style: none;
+    text-transform: uppercase;
+    justify-content: center;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+}
+.topOfNews ul li{
+    font-size: 20px;
+    position: relative;
+    font-family: UbisoftSans,Helvetica Neue,Helvetica,Arial,sans-serif;
+    color: #5a5a5a;
+    padding-bottom: 12px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.liSelected{
+    font-weight: 700;
+    color: #000;
+    border-bottom: black solid 4px;
+}
+.newsContain{
+    padding: 0 12px;
+    margin: 0 auto;
+}
+.news{
+    position: relative;
+    padding: 0 12px;
+}
