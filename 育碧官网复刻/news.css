@@ -1,6 +1,6 @@
 .newsBody{
-    margin: 0 auto 0 auto;
     padding: 73.44px 12px 41.04px 12px;
+    margin: 0 auto;
 }
 .newsBody>h1{
     padding-bottom: 10.8px;
@@ -34,8 +34,78 @@
 .newsContain{
     padding: 0 12px;
     margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
 }
 .news{
     position: relative;
     padding: 0 12px;
+    width: 50%;
+    float: left;
+}
+.CardLatestNews {
+    margin: 0 auto 27px;
+    height: 163px;
+    width: 538px;
+    display: flex;
+    clear: both;
+    overflow: hidden;
+    cursor: pointer;
+}
+.CardLatestNews__image-container {
+    width: 284px;
+    height: 160px;
+    overflow: hidden;
+}
+.CardLatestNews__image {
+    width: 100%;
+    height: 100%;
+}
+.CardLatestNews__content-container {
+    position: relative;
+    padding: 0 8px;
+    width: 310px;
+}
+.CardLatestNews__Heading {
+    margin-top: 0;
+    display: inline-block;
+    font-size: 19px;
+    line-height: 24px;
+    font-weight: 200;
+    color: #000;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.CardNewsResult__content-subtitle {
+    font-style: italic;
+    color: #5a5a5a;
+    font-size: 10px;
+    margin: 0;
+    line-height: 1;
+    padding-right: 10px;
+}
+.LatestNewsByline .\--byline-date {
+    display: block;
+    font-weight: 400;
+}
+.CardLatestNews__Excerpt {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    position: relative;
+    color: #5a5a5a;
+    font-family: UbisoftSans,Helvetica Neue,Helvetica,Arial,sans-serif;
+    margin: 1em 0;
+}
+.CardLatestNews__shadow {
+    position: absolute;
+    bottom: 0;
+    height: 70px;
+    background: #fff;
+    width: 100%;
+    background: -webkit-gradient(linear,left top,left bottom,from(hsla(0,0%,100%,0)),to(#fff));
+    background: -webkit-linear-gradient(top,hsla(0,0%,100%,0),#fff);
+    background: -o-linear-gradient(top,hsla(0,0%,100%,0),#fff);
+    background: linear-gradient(180deg,hsla(0,0%,100%,0),#fff);
 }
