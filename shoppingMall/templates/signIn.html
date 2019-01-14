@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename = 'MD5.js') }}"></script>
+</head>
+<body>
+<div id="main">
+    <label for="user">用户名</label>
+    <input placeholder="用户名" id="user"/>
+    <br>
+    <label for="email">邮箱</label>
+    <input placeholder="邮箱" id="email"/>
+    <br>
+    <label for="password">密码</label>
+    <input placeholder="密码" id="password" type="password"/>
+    <br>
+    <label><input type="radio" name="privilege" id="purchaser" checked="checked">买家</label>
+    <label><input type="radio" name="privilege" id="merchant">商家</label>
+    <a href="/login"><button id="log-in">登录</button></a>
+    <button id="sign-in">注册</button>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename = 'signin.js')}}"></script>
+</body>
+</html>
