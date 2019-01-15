@@ -29,14 +29,11 @@ function subListen() {
 
 function sentMsg(msg){
     let xhr=new XMLHttpRequest;
-    xhr.open("post","signin",false);
+    xhr.open("post","signToDb",false);
     xhr.send(JSON.stringify(msg));
-    console.log(window.location.href)
-    console.log(xhr.responseURL)
-    console.log(window.location.protocol)
-    if(xhr.responseURL===window.location.href){
+    if(xhr.responseText==="用户名已存在"||xhr.responseText==="邮箱已被注册"){
         alert(xhr.responseText);
-    }else{
+    } else{
         window.location.href=xhr.responseURL;
     }
 }
