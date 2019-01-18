@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" href="/static/favicon.ico">
 </head>
 <body>
-<h1>Welcome {{user_id}}</h1>
-<label><input type="text"/>Mall</label>
+<h1>Welcome {{ user }}</h1>
+<a href="/logout"><button>注销</button></a>
+<label>Mall<input type="text"/></label>
 <button id="search">搜索</button>
 </body>
 </html>

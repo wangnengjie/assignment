@@ -24,7 +24,7 @@ function subListen() {
 }
 function sentMsg(msg){
     let xhr=new XMLHttpRequest;
-    xhr.open("post","logToMall",false);
+    xhr.open("post","/api/logToMall",false);
     xhr.send(JSON.stringify(msg));
     console.log(xhr);
     if(xhr.responseText==="账号或密码错误"){

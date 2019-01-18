@@ -29,7 +29,7 @@ function subListen() {
 
 function sentMsg(msg){
     let xhr=new XMLHttpRequest;
-    xhr.open("post","signToDb",false);
+    xhr.open("post","/api/signToDb",false);
     xhr.send(JSON.stringify(msg));
     if(xhr.responseText==="用户名已存在"||xhr.responseText==="邮箱已被注册"){
         alert(xhr.responseText);
