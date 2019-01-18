@@ -45,7 +45,9 @@ def goods():
     if request.method == 'DELETE':
         try:
             msg = json.loads(request.get_data().decode('utf-8'))
-            myModule.deleteGoods(msg)
+            status=myModule.deleteGoods(user,msg)
+            if status==400:
+                return 'Bad Request',400
             return 'OK', 200
         except:
             return 'Bad Request', 400

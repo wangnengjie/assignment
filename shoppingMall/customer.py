@@ -11,18 +11,23 @@ import myModule
 customer = Blueprint('customer', __name__)
 
 
-@customer.route('/customer/goods')
-def goods():
-    token = request.cookies.get('token')
-    if not myModule.deJWT(token):
-        return '请重新登录', 400
-    keyword = request.get_data().decode('utf-8')
-    goods = myModule.searchGoods(keyword)
-    msg = {
-        'amount': len(goods),
-        'list': goods
-    }
-    return jsonify(msg)
+@customer.route('/customer/goods/<page>',methods=['GET','POST'])
+def goods(page):
+    if request.method == 'POST':
+        try:
+            token = request.cookies.get('token')
+            if not myModule.deJWT(token):
+                return '请重新登录', 400
+            keyword = request.get_data().decode('utf-8')
+            goods = myModule.searchGoods(keyword, page)
+            msg = {
+                'amount': len(goods),
+                'list': goods
+            }
+            return jsonify(msg)
+        except:
+            return 'Bad Request', 400
+    return 'Bad Request', 400
 
 
 @customer.route('/customer/carts', methods=['GET', 'POST'])

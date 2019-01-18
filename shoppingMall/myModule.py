@@ -100,9 +100,9 @@ def getUserFromJWT(token):
     return msg
 
 
-def searchGoods(keyword):
+def searchGoods(keyword,page):
     array = keyword.split(' ')
-    msg = dbGoods.find({'keyword': {'$in': array}})
+    msg = dbGoods.find({'keyword': {'$in': array}}).skip((int(page)-1)*10).limit(11)
     goods = [good for good in msg]
     for good in goods:
         good['_id'] = str(good['_id'])
@@ -238,14 +238,18 @@ def setCheck(user, msg):
     return
 
 
-def deleteGoods(msg):
+def deleteGoods(user, msg):
     # 从商城下架
     if msg['type'] == 1:
+        if user['user'] != dbGoods.find_one({'_id': ObjectId(msg['_id'])})['seller']:
+            return 400
         dbGoods.delete_one({'_id': ObjectId(msg['_id'])})
     # 从待审核栏下架
     elif msg['type'] == 2:
+        if user['user'] != dbChecks.find_one({'_id': ObjectId(msg['_id'])})['seller']:
+            return 400
         dbChecks.delete_one({'_id': ObjectId(msg['_id'])})
-    return
+    return 200
 
 
 def updateGoods(user, msg):
@@ -268,27 +272,33 @@ def updateGoods(user, msg):
     return
 
 
-def getUser(i):
-    users = dbUser.find({'privilege': i})
-    users = [user for user in users]
-    for user in users:
-        user['_id'] = str(user['_id'])
-    return users
+def getUser():
+    customers = dbUser.find({'privilege': 1})
+    sellers = dbUser.find({'privilege': 2})
+    customers = [customer for customer in customers]
+    sellers = [seller for seller in sellers]
+    for customer in customers:
+        del customer['salt']
+        customer['_id'] = str(customer['_id'])
+    for seller in sellers:
+        del seller['salt']
+        seller['_id'] = str(seller['_id'])
+    return {'seller': sellers, 'customer': customers}
 
 
 # 后续聊天室还有需要删除的东西！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 def deleteUser(msg):
-    user = dbUser.finf_one({'_id': ObjectId(msg)})
+    user = dbUser.find_one({'_id': ObjectId(msg)})
     privilege = user['privilege']
     if privilege == 0:
         return
     elif privilege == 1:
         dbUser.delete_one({'_id': ObjectId(msg)})
-        dbCart.remove({'user': user['name']})
+        dbCart.remove({'user': user['user']})
     elif privilege == 2:
         dbUser.delete_one({'_id': ObjectId(msg)})
-        dbGoods.remove({'seller': user['name']})
-        dbChecks.remove({'seller': user['name']})
+        dbGoods.remove({'seller': user['user']})
+        dbChecks.remove({'seller': user['user']})
     return
 
 

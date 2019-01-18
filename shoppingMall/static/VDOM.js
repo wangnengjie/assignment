@@ -231,7 +231,7 @@ function setPatches(node, newVDOM, patches, index) {
         let whatChange = currentPatches[0];
         switch (whatChange.change) {
             case TEXT:
-                node.textContent = whatChange.text;
+                node.textcontent = whatChange.text;
                 return;
             case ATTR:
                 setATTR(node, whatChange.props);

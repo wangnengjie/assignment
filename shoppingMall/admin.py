@@ -15,16 +15,10 @@ def handleUser():
     user = myModule.getUserFromJWT(token)
     if user['privilege'] != 0:
         return '请重新登录', 400
-
     if request.method == 'GET':
         try:
-            msg = request.get_data().decode('utf-8')
-            i = int(msg)
-            if i == 1 or i == 2:
-                users = myModule.getUser(i)
-            else:
-                return 'Bad Request', 400
-            return jsonify({'number': len(user), 'list': users}), 200
+            users = myModule.getUser()
+            return jsonify(users), 200
         except:
             return 'Bad Request', 400
 
@@ -47,13 +41,14 @@ def handleUser():
     if request.method == 'DELETE':
         try:
             msg = request.get_data().decode('utf-8')
+            print(msg)
             myModule.deleteUser(msg)
             return 'OK', 200
         except:
             return 'Bad Request', 400
 
 
-@admin.route('/admin/checks',methods=['GET','PUT','POST'])
+@admin.route('/admin/checks', methods=['GET', 'PUT', 'POST'])
 def handleChecks():
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
@@ -61,29 +56,45 @@ def handleChecks():
     user = myModule.getUserFromJWT(token)
     if user['privilege'] != 0:
         return '请重新登录', 400
-    
-    if request.method=='GET':
+
+    if request.method == 'GET':
         try:
-            goods=myModule.getCheck(user)
+            goods = myModule.getCheck(user)
             return jsonify({'number': len(goods), 'list': goods}), 200
-        except :
-            return 'Bad Request',400
-        
-    if request.method=='PUT':
+        except:
+            return 'Bad Request', 400
+
+    if request.method == 'PUT':
         try:
             msg = request.get_data().decode('utf-8')
             myModule.rejectCheck(msg)
-            return 'OK',200
-        except :
-            return 'Bad Request',400
-    
-    if request.method=='POST':
+            return 'OK', 200
+        except:
+            return 'Bad Request', 400
+
+    if request.method == 'POST':
         try:
             msg = request.get_data().decode('utf-8')
             myModule.passCheck(msg)
-            return 'OK',200
-        except :
-            return 'Bad Request',400
+            return 'OK', 200
+        except:
+            return 'Bad Request', 400
 
-# @admin.route('/admin/goods')
-# def getGoods #这玩意儿用过了，别用了
+
+@admin.route('/admin/goods/<page>', methods=['GET', 'POST'])
+def agoods(page):
+    if request.method == 'POST':
+        try:
+            token = request.cookies.get('token')
+            if not myModule.deJWT(token):
+                return '请重新登录', 400
+            keyword = request.get_data().decode('utf-8')
+            goods = myModule.searchGoods(keyword, page)
+            msg = {
+                'amount': len(goods),
+                'list': goods
+            }
+            return jsonify(msg)
+        except:
+            return 'Bad Request', 400
+    return 'Bad Request', 400

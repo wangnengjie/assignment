@@ -2,15 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, json, json
 from customer import customer
 from seller import seller
 from admin import admin
+from flask_socketio import SocketIO
 import pymongo
 import json
 import myModule
-
+import os
 app = Flask(__name__)
+app.config['SECRET_KEY']=os.urandom(24)
+app.config['SESSION_PERMANENT'] = True
 app.register_blueprint(customer)
 app.register_blueprint(seller)
 app.register_blueprint(admin)
-
+socketio=SocketIO(app)
 
 @app.route('/')
 def welcome():
@@ -29,15 +32,21 @@ def log():
 def sign():
     return send_file("./html/signIn.html")
 
-
+# 需要对不同权限用户更换不同route，不然会出小毛病，明天解决
 @app.route('/api/Mall')
 def mainPage():
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
         return redirect("/")
     userMsg = myModule.getUserFromJWT(token)
-    # if userMsg['privilege'] == 1:
-    return send_file('./html/Mall.html')
+    if userMsg['privilege'] == 1:
+        return send_file('./html/Mall.html')
+    elif userMsg['privilege'] == 0:
+        return send_file('./html/admin.html')
+    elif userMsg['privilege'] == 2:
+        return send_file('./html/seller.html')
+    else:
+        return 'Bad Request', 400
 
 
 @app.route('/api/signToDb', methods=['GET', 'POST'])
@@ -86,4 +95,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8888)
+    socketio.run(app,port=8888,debug=True)
