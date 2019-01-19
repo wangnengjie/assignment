@@ -2,18 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
-    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
-    <meta HTTP-EQUIV="Expires" CONTENT="0">
     <title>Title</title>
     <link rel="shortcut icon" href="/static/favicon.ico">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        div {
+            border-top: gray solid 1px;
+            border-bottom: gray solid 1px;
+        }
+
+        .cart {
+            padding-left: 20px;
+        }
+    </style>
 </head>
 <body>
 <h1>Welcome</h1>
 <a href="/api/logout"><button>注销</button></a>
-<br>
-<label>Mall<input type="text"/></label>
+<button>聊天室</button>
+<button id="cart">购物车</button>
+<button id="order">订单信息</button>
+<label><input type="text" class="search"/></label>
 <button id="search">搜索</button>
+<br>
+<div id="main"></div>
 <script type="application/javascript" src="/static/customer.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 from random import Random
 from hashlib import md5, sha256
+import datetime
 import pymongo
 import base64
 import json
@@ -11,17 +12,17 @@ db = connection.shop
 dbUser = db.user
 dbGoods = db.goods
 dbCart = db.cart
-dbOrders = db.orders
+dbOrders = db.order
 dbChecks = db.checks
-
-
+# print(dbOrders.find_one({'_id':ObjectId('5c4302cfa6763401c1353e42')})['time']+datetime.timedelta(hours=8))
+# dbOrders.insert_one({'time':datetime.datetime.utcnow()})
 def anaSign(msg):
     flag = 0
     if type(dbUser.find_one({'user': msg['user']})) == dict:
         flag = 1
     elif type(dbUser.find_one({'email': msg['email']})) == dict:
         flag = 2
-    elif msg['privilege'] != 1 or msg['privilege'] != 2:
+    elif msg['privilege'] != 1 and msg['privilege'] != 2:
         flag = 3
     return flag
 
@@ -41,6 +42,7 @@ def anaLog(msg):
         return ana
     ana['flag'] = True
     ana['user'] = user['user']
+    ana['privilege']=user['privilege']
     return ana
 
 
@@ -115,18 +117,20 @@ def addToCart(msg, user):
     goodsId = msg['id']
     k = dbCart.find_one({'user': name})
     if way == 0:
-        i = filter(goodsCanFound, goodsId)
-        if k == dict:
+        i = list(filter(goodsCanFound, goodsId))
+        if type(k) == dict:
             k = k['goodsId']
             dbCart.update_one(
                 {'user': name}, {'$set': {'goodsId': list(set(k+goodsId))}})
         else:
             dbCart.insert({'user': name, 'goodsId': i})
     elif way == 1:
+        k = k['goodsId']
         for i in goodsId:
             try:
+                k.remove(i)
                 dbCart.update_one(
-                    {'user': name}, {'$set': {'goodsId': k['goodsId'].remove(i)}})
+                    {'user': name}, {'$set': {'goodsId': k}})
             except:
                 continue
     return 200
@@ -134,6 +138,8 @@ def addToCart(msg, user):
 
 def searchCart(user):
     msg = dbCart.find_one({'user': user['user']})['goodsId']
+    if len(msg)==0:
+        return []
     a = []
     for good in msg:
         i = dbGoods.find_one({'_id': ObjectId(good)})
@@ -149,7 +155,7 @@ def searchCart(user):
 
 def goodsCanFound(id):
     try:
-        if dbGoods.find_one({'_id': ObjectId(id)}) == dict:
+        if type(dbGoods.find_one({'_id': ObjectId(id)})) == dict:
             return True
         else:
             return False
@@ -158,7 +164,7 @@ def goodsCanFound(id):
 
 
 def makeOrders(user, msg):
-    for key, value in msg['goods']:
+    for key, value in msg['goods'].items():
         try:
             good = dbGoods.find_one({'_id': ObjectId(key)})
             if good is None:
@@ -174,11 +180,15 @@ def makeOrders(user, msg):
                 'price': value*good['price']
             }
             order['adds'] = msg['adds']
-            order['time'] = time.strftime(
-                "%Y-%m-%d %H:%M:%S", time.localtime())
+            order['time'] = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
             dbOrders.insert_one(order)
             dbGoods.update_one({'_id': ObjectId(key)}, {
                                '$set': {'amount': good['amount']-value}})
+            k = dbCart.find_one({'user': user['user']})
+            k = k['goodsId']
+            k.remove(key)
+            dbCart.update_one(
+                    {'user': user['user']}, {'$set': {'goodsId': k}})
         except:
             return 400
     return 200

@@ -41,7 +41,6 @@ def handleUser():
     if request.method == 'DELETE':
         try:
             msg = request.get_data().decode('utf-8')
-            print(msg)
             myModule.deleteUser(msg)
             return 'OK', 200
         except:

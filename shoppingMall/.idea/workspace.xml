@@ -14,19 +14,30 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/html/admin.html">
+        <entry file="file://$PROJECT_DIR$/static/customer.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="7" column="24" lean-forward="true" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+            <state relative-caret-position="554">
+              <caret line="217" column="41" selection-start-line="217" selection-start-column="41" selection-end-line="217" selection-end-column="41" />
+              <folding>
+                <element signature="n#!!block;n#getGoods#0" />
+                <element signature="n#!!block;n#showGood#0" />
+                <element signature="n#!!block;n#f#0" />
+                <element signature="n#!!block;n#getCart#0" />
+                <element signature="n#!!block;n#showCart#0" />
+                <element signature="n#!!block;n#deleteCart#0" />
+                <element signature="n#!!block;n#minus#0" />
+                <element signature="n#!!block;n#plus#0" />
+                <element signature="n#!!block;n#makeOrder#0" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/html/signIn.html">
+        <entry file="file://$PROJECT_DIR$/html/Mall.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+            <state relative-caret-position="415">
+              <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -34,12 +45,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/admin.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret lean-forward="true" />
+            <state relative-caret-position="342">
+              <caret line="9" column="9" lean-forward="true" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
               <folding>
                 <element signature="n#!!block;n#getUser#0" />
                 <element signature="n#!!block;n#showSeller#0" />
                 <element signature="n#!!block;n#showCustomer#0" />
+                <element signature="n#!!block;n#deleteUser#0" />
+                <element signature="n#!!block;n#addUser#0" />
+                <element signature="n#!!block;n#sentUser#0" />
                 <element signature="n#!!block;n#getCheck#0" />
                 <element signature="n#!!block;n#showCheck#0" />
                 <element signature="n#!!block;n#passCheck#0" />
@@ -47,39 +61,6 @@
                 <element signature="n#!!block;n#getGoods#0" />
                 <element signature="n#!!block;n#showGood#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/signin.js">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/html/logIn.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="6" column="43" lean-forward="true" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/login.js">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/customer.js">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/html/Mall.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="6" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -99,6 +80,7 @@
       <find>React.</find>
       <find>注释节点</find>
       <find>注释</find>
+      <find>console</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -117,19 +99,20 @@
         <option value="$PROJECT_DIR$/templates/logIn.html" />
         <option value="$PROJECT_DIR$/templates/signIn.html" />
         <option value="$PROJECT_DIR$/templates/Mall.html" />
-        <option value="$PROJECT_DIR$/static/customer.js" />
-        <option value="$PROJECT_DIR$/static/login.js" />
         <option value="$PROJECT_DIR$/static/signin.js" />
-        <option value="$PROJECT_DIR$/static/admin.js" />
-        <option value="$PROJECT_DIR$/html/Mall.html" />
-        <option value="$PROJECT_DIR$/html/logIn.html" />
         <option value="$PROJECT_DIR$/html/signIn.html" />
         <option value="$PROJECT_DIR$/html/admin.html" />
+        <option value="$PROJECT_DIR$/html/logIn.html" />
+        <option value="$PROJECT_DIR$/static/login.js" />
+        <option value="$PROJECT_DIR$/static/admin.js" />
+        <option value="$PROJECT_DIR$/static/cart.js" />
+        <option value="$PROJECT_DIR$/html/Mall.html" />
+        <option value="$PROJECT_DIR$/static/customer.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="522" />
     <option name="width" value="974" />
     <option name="height" value="1047" />
   </component>
@@ -196,17 +179,18 @@
       <workItem from="1547553065242" duration="3721000" />
       <workItem from="1547785981543" duration="13549000" />
       <workItem from="1547809142757" duration="10465000" />
+      <workItem from="1547874524143" duration="5986000" />
+      <workItem from="1547884592747" duration="14294000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40956000" />
+    <option name="totallyTimeSpent" value="61236000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="522" y="0" width="974" height="1047" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11727079" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24507658" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -258,23 +242,51 @@
     <entry file="file://$PROJECT_DIR$/static/VDOM.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/customer.js">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/html/signIn.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/signin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="39" column="1" lean-forward="true" selection-start-line="6" selection-end-line="39" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/logIn.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/login.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/signin.js">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/html/admin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+          <folding>
+            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/admin.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
+        <state relative-caret-position="342">
+          <caret line="9" column="9" lean-forward="true" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
           <folding>
             <element signature="n#!!block;n#getUser#0" />
             <element signature="n#!!block;n#showSeller#0" />
             <element signature="n#!!block;n#showCustomer#0" />
+            <element signature="n#!!block;n#deleteUser#0" />
+            <element signature="n#!!block;n#addUser#0" />
+            <element signature="n#!!block;n#sentUser#0" />
             <element signature="n#!!block;n#getCheck#0" />
             <element signature="n#!!block;n#showCheck#0" />
             <element signature="n#!!block;n#passCheck#0" />
@@ -285,31 +297,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/html/Mall.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="6" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/html/logIn.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="6" column="43" lean-forward="true" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/html/signIn.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="6" column="43" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/html/admin.html">
+    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
-          <caret line="7" column="24" lean-forward="true" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+          <caret line="6286" column="4" selection-start-line="6286" selection-start-column="4" selection-end-line="6286" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/cart.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="8" column="40" lean-forward="true" selection-start-line="8" selection-start-column="40" selection-end-line="8" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/html/Mall.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="26" column="30" lean-forward="true" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/customer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="554">
+          <caret line="217" column="41" selection-start-line="217" selection-start-column="41" selection-end-line="217" selection-end-column="41" />
+          <folding>
+            <element signature="n#!!block;n#getGoods#0" />
+            <element signature="n#!!block;n#showGood#0" />
+            <element signature="n#!!block;n#f#0" />
+            <element signature="n#!!block;n#getCart#0" />
+            <element signature="n#!!block;n#showCart#0" />
+            <element signature="n#!!block;n#deleteCart#0" />
+            <element signature="n#!!block;n#minus#0" />
+            <element signature="n#!!block;n#plus#0" />
+            <element signature="n#!!block;n#makeOrder#0" />
+          </folding>
         </state>
       </provider>
     </entry>

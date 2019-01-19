@@ -1,14 +1,17 @@
-
+const emailReg=/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+const pwdReg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+const userReg=/^[a-zA-Z0-9_-]{4,16}$/;
 const userBtn = document.querySelector('#user');
 const checkBtn = document.querySelector('#check');
 const goodsBtn = document.querySelector('#goods');
 const mainDiv = document.querySelector('#main');
-let searchBox = document.querySelector('.search');
+const addBtn=document.querySelector('#addUser');
+const searchBox = document.querySelector('.search');
 let user;
 userBtn.addEventListener('click', getUser);
 checkBtn.addEventListener('click', getCheck);
 goodsBtn.addEventListener('click', getGoods);
-
+addBtn.addEventListener('click',addUser);
 /**
  * 用户相关
  */
@@ -83,6 +86,51 @@ function deleteUser(id) {
     })
 }
 
+function addUser() {
+    mainDiv.innerHTML=`<label for="users">用户名</label>
+        <input placeholder="用户名" id="users"/>
+        <br>
+        <label for="email">邮箱</label>
+        <input placeholder="邮箱" id="email"/>
+        <br>
+        <label for="password">密码</label>
+        <input placeholder="密码" id="password" type="password"/>
+        <br>
+        <label><input type="radio" name="privilege" id="purchaser" checked="checked">买家</label>
+        <label><input type="radio" name="privilege" id="merchant">商家</label>
+        <button onclick="sentUser()">添加</button>`;
+}
+
+function sentUser() {
+    let msg={};
+    msg.user=document.querySelector('#users').value;
+    msg.email=document.querySelector('#email').value;
+    msg.pwd=document.querySelector('#password').value;
+    if(!emailReg.test(msg.email)){
+        alert('邮箱格式错误');
+        return;
+    }else if(!pwdReg.test(msg.pwd)){
+        alert('密码格式错误');
+        return;
+    }else if(!userReg.test(msg.user)){
+        alert('用户名格式错误');
+        return;
+    }
+    if(document.querySelector('#purchaser').checked){
+        msg.privilege=1;
+    }else{
+        msg.privilege=2;
+    }
+    msg.pwd=hex_md5(msg.pwd+"shop").toUpperCase();
+    let xhr=new XMLHttpRequest;
+    xhr.open("post","/api/signToDb",false);
+    xhr.send(JSON.stringify(msg));
+    if(xhr.responseText==="用户名已存在"||xhr.responseText==="邮箱已被注册"){
+        alert(xhr.responseText);
+    }else {
+        alert(xhr.responseText)
+    }
+}
 /**
  * 审核相关
  */
@@ -115,7 +163,7 @@ function showCheck(obj) {
     <p>审核号：${obj['_id']}</p>
     <p>商品名：${obj.name}</p>
     <p>卖家：${obj.seller}</p>
-    <p>价格：${(obj.price) / 100}</p>
+    <p>价格：￥${(obj.price) / 100}</p>
     <p>数量：${obj.amount}</p>
     <p>关键词：${keyword}</p>
     <p>申请时间：${obj.time}</p>
@@ -160,12 +208,10 @@ function rejectCheck(id) {
         alert(err.message)
     })
 }
-
 /**
  * 获取商品
  */
 function getGoods(event, page = 1, keyword = searchBox.value) {
-    console.log(page, keyword);
     if (keyword === '')
         return;
     fetch(`/admin/goods/${page}`, {
@@ -206,7 +252,7 @@ function showGood(obj) {
     <p>商品号：${obj['_id']}</p>
     <p>商品名：${obj.name}</p>
     <p>卖家：${obj.seller}</p>
-    <p>价格：${(obj.price) / 100}</p>
+    <p>价格：￥${(obj.price) / 100}</p>
     <p>数量：${obj.amount}</p>
     <p>关键词：${keyword}</p>
     <br><br>

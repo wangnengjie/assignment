@@ -50,7 +50,7 @@ def handleCart():
         msg = json.loads(request.get_data().decode('utf-8'))
         sta = myModule.addToCart(msg, user)
         return 'OK', sta
-    return '400', 400
+    return 'Bad Request', 400
 
 
 @customer.route('/customer/orders', methods=['GET', 'POST'])

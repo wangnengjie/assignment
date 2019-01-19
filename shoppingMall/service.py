@@ -8,18 +8,28 @@ import json
 import myModule
 import os
 app = Flask(__name__)
-app.config['SECRET_KEY']=os.urandom(24)
+app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SESSION_PERMANENT'] = True
 app.register_blueprint(customer)
 app.register_blueprint(seller)
 app.register_blueprint(admin)
-socketio=SocketIO(app)
+socketio = SocketIO(app)
+
 
 @app.route('/')
 def welcome():
     token = request.cookies.get('token')
     if myModule.deJWT(token):
-        return redirect("/api/Mall")
+        user = myModule.getUserFromJWT(token)
+        if user['privilege'] == 0:
+            resp = make_response(redirect(url_for('welAdmin')))
+        elif user['privilege'] == 1:
+            resp = make_response(redirect(url_for('welCustomer')))
+        elif user['privilege'] == 2:
+            resp = make_response(redirect(url_for('welSeller')))
+        else:
+            return 'Bad Request', 400
+        return resp
     return send_file("./html/index.html")
 
 
@@ -32,32 +42,60 @@ def log():
 def sign():
     return send_file("./html/signIn.html")
 
-# 需要对不同权限用户更换不同route，不然会出小毛病，明天解决
-@app.route('/api/Mall')
-def mainPage():
+
+@app.route('/api/admin')
+def welAdmin():
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
         return redirect("/")
-    userMsg = myModule.getUserFromJWT(token)
-    if userMsg['privilege'] == 1:
-        return send_file('./html/Mall.html')
-    elif userMsg['privilege'] == 0:
-        return send_file('./html/admin.html')
-    elif userMsg['privilege'] == 2:
-        return send_file('./html/seller.html')
-    else:
-        return 'Bad Request', 400
+    user = myModule.getUserFromJWT(token)
+    if user['privilege'] != 0:
+        return '请重新登录', 400
+    return send_file('./html/admin.html')
+
+
+@app.route('/api/seller')
+def welSeller():
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return redirect("/")
+    user = myModule.getUserFromJWT(token)
+    if user['privilege'] != 2:
+        return '请重新登录', 400
+    return send_file('./html/seller.html')
+
+
+@app.route('/api/customer')
+def welCustomer():
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return redirect("/")
+    user = myModule.getUserFromJWT(token)
+    if user['privilege'] != 1:
+        return '请重新登录', 400
+    return send_file('./html/Mall.html')
 
 
 @app.route('/api/signToDb', methods=['GET', 'POST'])
 def signToDb():
     if request.method == 'POST':
         msg = json.loads(request.get_data().decode('utf-8'))
+        if msg['privilege'] == 0:
+            return 'Bad Request', 400
         flag = myModule.anaSign(msg)
         if flag == 0:
+            token = request.cookies.get('token')
+            if type(token) == str:
+                user = myModule.getUserFromJWT(token)
+                if user['privilege'] == 0:
+                    myModule.addUser(msg)
+                    return 'OK', 200
             myModule.addUser(msg)
             JWT = myModule.encodeJWT(msg)
-            resp = make_response(redirect(url_for('mainPage')))
+            if msg['privilege'] == 1:
+                resp = make_response(redirect(url_for('welCustomer')))
+            elif msg['privilege'] == 2:
+                resp = make_response(redirect(url_for('welSeller')))
             resp.set_cookie("token", JWT, httponly=True, max_age=86400)
             return resp
         elif flag == 1:
@@ -74,7 +112,14 @@ def logToMall():
         msg = json.loads(request.get_data().decode('utf-8'))
         ana = myModule.anaLog(msg)
         if ana['flag']:
-            resp = make_response(redirect(url_for('mainPage')))
+            if ana['privilege'] == 0:
+                resp = make_response(redirect(url_for('welAdmin')))
+            elif ana['privilege'] == 1:
+                resp = make_response(redirect(url_for('welCustomer')))
+            elif ana['privilege'] == 2:
+                resp = make_response(redirect(url_for('welSeller')))
+            else:
+                return 'Bad Request', 400
             JWT = myModule.encodeJWT(ana)
             resp.set_cookie("token", JWT, httponly=True, max_age=86400)
             return resp
@@ -95,4 +140,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    socketio.run(app,port=8888,debug=True)
+    socketio.run(app, port=8888, debug=True)
