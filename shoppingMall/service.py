@@ -2,18 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for, json, json
 from customer import customer
 from seller import seller
 from admin import admin
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO,emit,send,join_room,leave_room
 import pymongo
 import json
 import myModule
 import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SESSION_PERMANENT'] = True
 app.register_blueprint(customer)
 app.register_blueprint(seller)
 app.register_blueprint(admin)
-socketio = SocketIO(app)
+app.debug=True
+socketio=SocketIO(app)
+user_chat={}
 
 
 @app.route('/')
@@ -138,6 +139,45 @@ def logout():
 def page_not_found(error):
     return '404'
 
+@app.route('/api/chat')
+def test_chat():
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return '请重新登录', 400
+    return send_file('./html/test.html')
 
+@socketio.on('connect',namespace='/api/chat')
+def test_connect():
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return redirect('/')
+    user = myModule.getUserFromJWT(token)
+    user_chat[user['user']]=request.sid
+    records=myModule.getRecord(user)
+    emit('my response', records)
+
+@socketio.on('disconnect', namespace='/api/chat')
+def test_disconnect():
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return redirect('/')
+    user = myModule.getUserFromJWT(token)
+    user_chat.pop(user['user'])
+
+
+@socketio.on('msg',namespace='/api/chat')
+def sent_msg(data):
+    token = request.cookies.get('token')
+    if not myModule.deJWT(token):
+        return redirect('/')
+    target=user_chat.get(data['to'])
+    if target!=None:
+        emit('my response',data,room=target)
+    myModule.insertRecord(data)
+
+
+
+
+# ,host='0.0.0.0'
 if __name__ == '__main__':
-    socketio.run(app, port=8888, debug=True)
+    socketio.run(app,port=8888)

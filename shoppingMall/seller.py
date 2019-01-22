@@ -32,7 +32,7 @@ def goods():
     if request.method == 'GET':
         good1 = myModule.getGoods(user)
         good2 = myModule.getCheck(user)
-        return jsonify({'on': good1, 'check': good2})
+        return jsonify({'on': good1, 'check': good2}),200
     # 上架商品（送去审核）
     if request.method == 'POST':
         try:

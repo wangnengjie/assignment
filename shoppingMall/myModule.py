@@ -7,15 +7,21 @@ import json
 import time
 import hmac
 from bson.objectid import ObjectId
-connection = pymongo.MongoClient('127.0.0.1', 27017)
+from bson import json_util
+connection = pymongo.MongoClient('localhost', 27017)
 db = connection.shop
 dbUser = db.user
 dbGoods = db.goods
 dbCart = db.cart
 dbOrders = db.order
 dbChecks = db.checks
+dbRecords = db.records
+dbRecords.create_index([("time", 1)],
+                       expireAfterSeconds=259200)
 # print(dbOrders.find_one({'_id':ObjectId('5c4302cfa6763401c1353e42')})['time']+datetime.timedelta(hours=8))
 # dbOrders.insert_one({'time':datetime.datetime.utcnow()})
+
+
 def anaSign(msg):
     flag = 0
     if type(dbUser.find_one({'user': msg['user']})) == dict:
@@ -42,7 +48,7 @@ def anaLog(msg):
         return ana
     ana['flag'] = True
     ana['user'] = user['user']
-    ana['privilege']=user['privilege']
+    ana['privilege'] = user['privilege']
     return ana
 
 
@@ -102,9 +108,10 @@ def getUserFromJWT(token):
     return msg
 
 
-def searchGoods(keyword,page):
+def searchGoods(keyword, page):
     array = keyword.split(' ')
-    msg = dbGoods.find({'keyword': {'$in': array}}).skip((int(page)-1)*10).limit(11)
+    msg = dbGoods.find({'keyword': {'$in': array}}).skip(
+        (int(page)-1)*10).limit(11)
     goods = [good for good in msg]
     for good in goods:
         good['_id'] = str(good['_id'])
@@ -138,7 +145,7 @@ def addToCart(msg, user):
 
 def searchCart(user):
     msg = dbCart.find_one({'user': user['user']})['goodsId']
-    if len(msg)==0:
+    if len(msg) == 0:
         return []
     a = []
     for good in msg:
@@ -180,7 +187,8 @@ def makeOrders(user, msg):
                 'price': value*good['price']
             }
             order['adds'] = msg['adds']
-            order['time'] = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
+            order['time'] = datetime.datetime.utcnow() + \
+                datetime.timedelta(hours=8)
             dbOrders.insert_one(order)
             dbGoods.update_one({'_id': ObjectId(key)}, {
                                '$set': {'amount': good['amount']-value}})
@@ -188,7 +196,7 @@ def makeOrders(user, msg):
             k = k['goodsId']
             k.remove(key)
             dbCart.update_one(
-                    {'user': user['user']}, {'$set': {'goodsId': k}})
+                {'user': user['user']}, {'$set': {'goodsId': k}})
         except:
             return 400
     return 200
@@ -196,9 +204,11 @@ def makeOrders(user, msg):
 
 def getOrders(user):
     if user['privilege'] == 1:
-        orders = dbOrders.find({'customer': user['user']})
+        orders = dbOrders.find({'customer': user['user']}).sort(
+            'time', pymongo.DESCENDING)
     elif user['privilege'] == 2:
-        orders = dbOrders.find({'seller': user['user']})
+        orders = dbOrders.find({'seller': user['user']}).sort(
+            'time', pymongo.DESCENDING)
     elif user['privilege'] == 0:
         order = dbOrders.find()
 
@@ -222,9 +232,9 @@ def getGoods(user):
 
 def getCheck(user):
     if user['privilege'] == 2:
-        goods = dbChecks.find({'seller': user['user']})
+        goods = dbChecks.find({'seller': user['user']}).sort('time')
     elif user['privilege'] == 0:
-        goods = dbChecks.find({'status': 0})
+        goods = dbChecks.find({'status': 0}).sort('time')
 
     goods = [good for good in goods]
     for good in goods:
@@ -241,7 +251,7 @@ def setCheck(user, msg):
         "amount": msg['amount'],
         "price": msg['price'],
         "keyword": key,
-        "time": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+        "time": datetime.datetime.utcnow()+datetime.timedelta(hours=8),
         "status": 0
     }
     dbChecks.insert_one(a)
@@ -274,10 +284,10 @@ def updateGoods(user, msg):
             "time": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
             "status": 0
         }
-        dbChecks.update_one({'_id': ObjectId(msg['id'])}, {'$set': a})
+        dbChecks.update_one({'_id': ObjectId(msg['_id'])}, {'$set': a})
     # 从商城架上更新
     elif msg['type'] == 1:
-        deleteGoods(msg)
+        deleteGoods(user, msg)
         setCheck(user, msg)
     return
 
@@ -329,3 +339,15 @@ def passCheck(msg):
     dbGoods.insert_one(a)
     dbChecks.delete_one({'_id': ObjectId(msg)})
     return
+
+
+def getRecord(user):
+    records = dbRecords.find(
+        {'$or': [{'from': user['user']}, {'to': user['user']}]}, {'_id': 0}).sort('time')
+    msg = [record for record in records]
+    return json.dumps({'msg':msg},default=json_util.default)
+
+
+def insertRecord(msg):
+    msg['time'] = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
+    dbRecords.insert_one(msg)

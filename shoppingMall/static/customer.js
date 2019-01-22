@@ -73,7 +73,7 @@ function addToCart(id) {
     }).then(data => {
         alert(data);
         if (data !== 'OK') {
-            window.location.href = '/'
+            window.location.href = '/login'
         }
     })
 }
@@ -195,7 +195,7 @@ function getOrder() {
             return response.json();
         }
         alert('请重新登录');
-        window.location.href='/';
+        window.location.href='/login';
     }).then(data=>{
         if(data.amount===0){
             mainDiv.innerHTML=`<h1>您目前还没有下过单诶</h1>`;
@@ -213,7 +213,7 @@ function showOrder(data) {
                 <p>卖家：${order.seller}</p>
                 <p>商品：${order.goodsName}</p>
                 <p>数量：${order.amount}</p>
-                <p>价格：${(order.price)/100}</p>
+                <p>总格：￥${(order.price)/100}</p>
                 <p>收货地址：${order.adds}</p>
                 <p>下单时间：${order.time}</p>
             </div>`

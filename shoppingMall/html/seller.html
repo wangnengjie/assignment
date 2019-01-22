@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        div {
+            border-top: gray solid 1px;
+            border-bottom: gray solid 1px;
+        }
+
+        .order {
+            padding: 20px;
+        }
+        .add{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Welcome</h1>
+<a href="/api/logout"><button>注销</button></a>
+<button id="check">上架商品</button>
+<button id="order">查看订单</button>
+<button id="goods">查看商品</button>
+<button id="chat">聊天室</button>
+<br><br>
+<div id="main"></div>
+<script type="application/javascript" src="/static/seller.js"></script>
+</body>
+</html>
