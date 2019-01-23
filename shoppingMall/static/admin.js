@@ -1,17 +1,18 @@
-const emailReg=/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-const pwdReg=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
-const userReg=/^[a-zA-Z0-9_-]{4,16}$/;
+const emailReg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+const pwdReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+const userReg = /^[a-zA-Z0-9_-]{4,16}$/;
 const userBtn = document.querySelector('#user');
 const checkBtn = document.querySelector('#check');
 const goodsBtn = document.querySelector('#goods');
 const mainDiv = document.querySelector('#main');
-const addBtn=document.querySelector('#addUser');
+const addBtn = document.querySelector('#addUser');
 const searchBox = document.querySelector('.search');
 let user;
 userBtn.addEventListener('click', getUser);
 checkBtn.addEventListener('click', getCheck);
 goodsBtn.addEventListener('click', getGoods);
-addBtn.addEventListener('click',addUser);
+addBtn.addEventListener('click', addUser);
+
 /**
  * 用户相关
  */
@@ -40,9 +41,9 @@ function getUser() {
 function showSeller() {
     mainDiv.innerHTML = `<button onclick="showSeller()">卖家</button>
                          <button onclick="showCustomer()">买家</button><br>`;
-    let sellers=user.seller;
-    sellers.forEach(seller=>{
-        mainDiv.innerHTML+=`<div id="${seller['_id']}">
+    let sellers = user.seller;
+    sellers.forEach(seller => {
+        mainDiv.innerHTML += `<div id="${seller['_id']}">
             <p>用户名：${seller.user}</p>
             <p>邮箱：${seller.email}</p>
             <p>权限：卖家</p>
@@ -54,9 +55,9 @@ function showSeller() {
 function showCustomer() {
     mainDiv.innerHTML = `<button onclick="showSeller()">卖家</button>
                          <button onclick="showCustomer()">买家</button><br>`;
-    let customers=user.customer;
-    customers.forEach(customer=>{
-        mainDiv.innerHTML+=`<div id="${customer['_id']}">
+    let customers = user.customer;
+    customers.forEach(customer => {
+        mainDiv.innerHTML += `<div id="${customer['_id']}">
             <p>用户名：${customer.user}</p>
             <p>邮箱：${customer.email}</p>
             <p>权限：买家</p>
@@ -66,28 +67,32 @@ function showCustomer() {
 }
 
 function deleteUser(id) {
-    fetch('/admin/user',{
-        body:id,
-        method:'DELETE',
+    fetch('/admin/user', {
+        body: id,
+        method: 'DELETE',
         credentials: 'include',
-    }).then(response=>{
-        if(response.ok){
+    }).then(response => {
+        if (response.ok) {
             return response.text();
         }
-        throw new Error ('Bad Request');
-    }).then(response=>{
+        throw new Error('Bad Request');
+    }).then(response => {
         alert(response);
         mainDiv.removeChild(document.getElementById(`${id}`));
-        user.seller=user.seller.filter(e=>{return e['_id']!==id});
-        user.customer=user.customer.filter(e=>{return e['_id']!==id});
-    }).catch(err=>{
+        user.seller = user.seller.filter(e => {
+            return e['_id'] !== id
+        });
+        user.customer = user.customer.filter(e => {
+            return e['_id'] !== id
+        });
+    }).catch(err => {
         alert(err.message);
         window.location.href = '/login';
     })
 }
 
 function addUser() {
-    mainDiv.innerHTML=`<label for="users">用户名</label>
+    mainDiv.innerHTML = `<label for="users">用户名</label>
         <input placeholder="用户名" id="users"/>
         <br>
         <label for="email">邮箱</label>
@@ -102,35 +107,36 @@ function addUser() {
 }
 
 function sentUser() {
-    let msg={};
-    msg.user=document.querySelector('#users').value;
-    msg.email=document.querySelector('#email').value;
-    msg.pwd=document.querySelector('#password').value;
-    if(!emailReg.test(msg.email)){
+    let msg = {};
+    msg.user = document.querySelector('#users').value;
+    msg.email = document.querySelector('#email').value;
+    msg.pwd = document.querySelector('#password').value;
+    if (!emailReg.test(msg.email)) {
         alert('邮箱格式错误');
         return;
-    }else if(!pwdReg.test(msg.pwd)){
+    } else if (!pwdReg.test(msg.pwd)) {
         alert('密码格式错误');
         return;
-    }else if(!userReg.test(msg.user)){
+    } else if (!userReg.test(msg.user)) {
         alert('用户名格式错误');
         return;
     }
-    if(document.querySelector('#purchaser').checked){
-        msg.privilege=1;
-    }else{
-        msg.privilege=2;
+    if (document.querySelector('#purchaser').checked) {
+        msg.privilege = 1;
+    } else {
+        msg.privilege = 2;
     }
-    msg.pwd=hex_md5(msg.pwd+"shop").toUpperCase();
-    let xhr=new XMLHttpRequest;
-    xhr.open("post","/api/signToDb",false);
+    msg.pwd = hex_md5(msg.pwd + "shop").toUpperCase();
+    let xhr = new XMLHttpRequest;
+    xhr.open("post", "/api/signToDb", false);
     xhr.send(JSON.stringify(msg));
-    if(xhr.responseText==="用户名已存在"||xhr.responseText==="邮箱已被注册"){
+    if (xhr.responseText === "用户名已存在" || xhr.responseText === "邮箱已被注册") {
         alert(xhr.responseText);
-    }else {
+    } else {
         alert(xhr.responseText)
     }
 }
+
 /**
  * 审核相关
  */
@@ -208,6 +214,7 @@ function rejectCheck(id) {
         alert(err.message)
     })
 }
+
 /**
  * 获取商品
  */

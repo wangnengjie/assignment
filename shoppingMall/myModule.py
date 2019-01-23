@@ -315,10 +315,14 @@ def deleteUser(msg):
     elif privilege == 1:
         dbUser.delete_one({'_id': ObjectId(msg)})
         dbCart.remove({'user': user['user']})
+        dbRecords.remove(
+            {'$or': [{'from': user['user']}, {'to': user['user']}]})
     elif privilege == 2:
         dbUser.delete_one({'_id': ObjectId(msg)})
         dbGoods.remove({'seller': user['user']})
         dbChecks.remove({'seller': user['user']})
+        dbRecords.remove(
+            {'$or': [{'from': user['user']}, {'to': user['user']}]})
     return
 
 
@@ -341,13 +345,26 @@ def passCheck(msg):
     return
 
 
-def getRecord(user):
-    records = dbRecords.find(
-        {'$or': [{'from': user['user']}, {'to': user['user']}]}, {'_id': 0}).sort('time')
+def findRecord(user, target):
+    records=dbRecords.find(
+        {'$or': [{'from': user, 'to': target}, {'from': target, 'to': user}]},{'_id':0}).sort('time')
     msg = [record for record in records]
-    return json.dumps({'msg':msg},default=json_util.default)
+    dbRecords.update({'to': user,'from':target}, {'$set': {'recv': 1}})
+    return json.dumps(msg,default=json_util.default)
+
+def getRecord(user):
+    recent = set()
+    unread = dbRecords.find({'to': user['user'], 'recv': 0}).count()
+    records = dbRecords.find(
+        {'$or': [{'from': user['user']}, {'to': user['user']}]})
+    msg = [record for record in records]
+    for i in msg:
+        recent.add(i['from'])
+        recent.add(i['to'])
+    return json.dumps({'user': user['user'], 'unread': unread, 'resent': list(recent)}, default=json_util.default)
 
 
-def insertRecord(msg):
+def insertRecord(msg, geted):
     msg['time'] = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
+    msg['recv'] = geted
     dbRecords.insert_one(msg)

@@ -141,7 +141,7 @@ function showCheck() {
         mainDiv.innerHTML += `<div id='${good['_id']}' class="add">
             <button onclick="deleteGoods(2,'${good['_id']}')">下架</button> <button onclick="modifyGoods(2,'${good['_id']}')" class="modify">修改</button>
             <p>审核号：${good['_id']}</p>
-            <p>状态：${(good.status===0)?'待审核':'未通过'}</p>
+            <p>状态：${(good.status === 0) ? '待审核' : '未通过'}</p>
             <p>商品：${good.name}</p>
             <p>库存：${good.amount}</p>
             <p>单价：￥${good.price / 100}</p>
@@ -185,7 +185,7 @@ function modifyGoods(method, id) {
 }
 
 function cancel(obj) {
-    obj.parentNode.innerHTML='';
+    obj.parentNode.innerHTML = '';
     let nodes = document.querySelectorAll('.modify');
     nodes.forEach(node => {
         node.disabled = false;

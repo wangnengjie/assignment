@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, json, json
 from customer import customer
 from seller import seller
 from admin import admin
-from flask_socketio import SocketIO,emit,send,join_room,leave_room
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
+from bson import json_util
 import pymongo
 import json
 import myModule
@@ -12,9 +13,10 @@ app.config['SECRET_KEY'] = os.urandom(24)
 app.register_blueprint(customer)
 app.register_blueprint(seller)
 app.register_blueprint(admin)
-app.debug=True
-socketio=SocketIO(app)
-user_chat={}
+app.debug = True
+socketio = SocketIO(app)
+user_chat = {}
+user_list = []
 
 
 @app.route('/')
@@ -139,45 +141,72 @@ def logout():
 def page_not_found(error):
     return '404'
 
-@app.route('/api/chat')
+
+@app.route('/api/online')
 def test_chat():
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
         return '请重新登录', 400
-    return send_file('./html/test.html')
+    return str(user_list)
 
-@socketio.on('connect',namespace='/api/chat')
+
+@app.route('/api/record', methods=['GET', 'POST'])
+def findRecord():
+    if request.method == 'POST':
+        token = request.cookies.get('token')
+        if not myModule.deJWT(token):
+            return '请重新登录', 400
+        user = myModule.getUserFromJWT(token)
+        target = request.get_data().decode('utf-8')
+        record = myModule.findRecord(user['user'], target)
+        return jsonify({'msg': json.loads(record)}), 200
+    return 'Bad Request', 400
+
+
+@socketio.on('connect', namespace='/api/chat')
 def test_connect():
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
-        return redirect('/')
-    user = myModule.getUserFromJWT(token)
-    user_chat[user['user']]=request.sid
-    records=myModule.getRecord(user)
-    emit('my response', records)
+        emit('error', '请重新登录')
+    else:
+        user = myModule.getUserFromJWT(token)
+        user_chat[user['user']] = request.sid
+        user_list.append(user['user'])
+        records = myModule.getRecord(user)
+        emit('my response', records)
+
 
 @socketio.on('disconnect', namespace='/api/chat')
 def test_disconnect():
     token = request.cookies.get('token')
-    if not myModule.deJWT(token):
-        return redirect('/')
     user = myModule.getUserFromJWT(token)
     user_chat.pop(user['user'])
+    user_list.remove(user['user'])
 
 
-@socketio.on('msg',namespace='/api/chat')
+@socketio.on('msg', namespace='/api/chat')
 def sent_msg(data):
     token = request.cookies.get('token')
     if not myModule.deJWT(token):
-        return redirect('/')
-    target=user_chat.get(data['to'])
-    if target!=None:
-        emit('my response',data,room=target)
-    myModule.insertRecord(data)
-
-
+        emit('error', '请重新登录', room=request.sid)
+        return 0
+    else:
+        get = 0
+        user = myModule.getUserFromJWT(token)
+        data['from'] = user['user']
+        target = user_chat.get(data['to'])
+        if target != None:
+            get = 1
+            myModule.insertRecord(data, get)
+            data.pop('_id')
+            emit('recvMsg', json.dumps(
+                data, default=json_util.default), room=target)
+        else:
+            myModule.insertRecord(data, get)
+            data.pop('_id')
+        return json.dumps(data, default=json_util.default)
 
 
 # ,host='0.0.0.0'
 if __name__ == '__main__':
-    socketio.run(app,port=8888)
+    socketio.run(app, port=8888)

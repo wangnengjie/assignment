@@ -5,7 +5,8 @@ const searchBox = document.querySelector('.search');
 const mainDiv = document.querySelector('#main');
 searchBtn.addEventListener('click', getGoods);
 cartBtn.addEventListener('click', getCart);
-orderBtn.addEventListener('click',getOrder);
+orderBtn.addEventListener('click', getOrder);
+
 /**
  * 获取商品
  */
@@ -54,7 +55,7 @@ function showGood(obj) {
     <p>库存：${obj.amount}</p>
     <p>关键词：${keyword}</p>
     <button onclick="addToCart('${obj['_id']}')">添加到购物车</button>
-    <button>联系卖家</button>  
+    <button onclick="connectSeller('${obj.seller}')">联系卖家</button>  
     <br><br>
 </div>`
 }
@@ -157,29 +158,29 @@ function plus(item, max) {
  * 订单相关
  */
 function makeOrder() {
-    let adds=document.querySelector('#adds').value.replace(' ','');
-    if (adds===''){
+    let adds = document.querySelector('#adds').value.replace(' ', '');
+    if (adds === '') {
         return;
     }
-    let msg={};
-    let nodeOfAmount=document.querySelectorAll('.amount');
-    nodeOfAmount.forEach(node=>{
-        if (parseInt(node.value)>0){
-            let id=node.parentNode.id;
-            msg[id]=parseInt(node.value);
+    let msg = {};
+    let nodeOfAmount = document.querySelectorAll('.amount');
+    nodeOfAmount.forEach(node => {
+        if (parseInt(node.value) > 0) {
+            let id = node.parentNode.id;
+            msg[id] = parseInt(node.value);
         }
     });
-    fetch('/customer/orders',{
-        body:JSON.stringify({adds:adds,goods:msg}),
-        method:'POST',
-        credentials:'include',
-    }).then(response=>{
-        if(response.ok){
+    fetch('/customer/orders', {
+        body: JSON.stringify({adds: adds, goods: msg}),
+        method: 'POST',
+        credentials: 'include',
+    }).then(response => {
+        if (response.ok) {
             alert('OK');
-            for(let k in msg){
+            for (let k in msg) {
                 mainDiv.removeChild(document.getElementById(`${k}`))
             }
-        }else{
+        } else {
             alert('超额');
             getCart();
         }
@@ -187,35 +188,49 @@ function makeOrder() {
 }
 
 function getOrder() {
-    fetch('/customer/orders',{
-        method:'GET',
-        credentials:'include',
-    }).then(response=>{
-        if(response.ok){
+    fetch('/customer/orders', {
+        method: 'GET',
+        credentials: 'include',
+    }).then(response => {
+        if (response.ok) {
             return response.json();
         }
         alert('请重新登录');
-        window.location.href='/login';
-    }).then(data=>{
-        if(data.amount===0){
-            mainDiv.innerHTML=`<h1>您目前还没有下过单诶</h1>`;
-        }else {
+        window.location.href = '/login';
+    }).then(data => {
+        if (data.amount === 0) {
+            mainDiv.innerHTML = `<h1>您目前还没有下过单诶</h1>`;
+        } else {
             showOrder(data.list);
         }
     })
 }
 
 function showOrder(data) {
-    mainDiv.innerHTML='';
-    data.forEach(order=>{
-        mainDiv.innerHTML+=`<div>
+    mainDiv.innerHTML = '';
+    data.forEach(order => {
+        mainDiv.innerHTML += `<div>
                 <p>订单号：${order['_id']}</p>
                 <p>卖家：${order.seller}</p>
                 <p>商品：${order.goodsName}</p>
                 <p>数量：${order.amount}</p>
-                <p>总格：￥${(order.price)/100}</p>
+                <p>总格：￥${(order.price) / 100}</p>
                 <p>收货地址：${order.adds}</p>
                 <p>下单时间：${order.time}</p>
             </div>`
     })
+}
+
+
+/**
+ * 聊天室相关
+ */
+function connectSeller(seller) {
+    showChat();
+    if (!document.querySelector(`#${seller}`)) {
+        recordMsg.resent.push(seller);
+        let node = document.querySelector('.recent-list');
+        node.innerHTML += `<button onclick="startChat('${seller}')" id="${seller}">${seller}</button><br>`
+    }
+    startChat(seller)
 }

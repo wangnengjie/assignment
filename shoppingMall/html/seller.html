@@ -21,7 +21,46 @@
         .add{
             padding: 20px;
         }
+        .recent-list{
+            border: none;
+            display: inline-block;
+            margin-left: 20vw;
+            width: 15vw;
+            height: 60vh;
+            overflow-y: auto;
+        }
+        .chat-window{
+            border: none;
+            display: inline-block;
+            width: 45vw;
+            height: 60vh;
+        }
+        .subdiv::-webkit-scrollbar{
+            width: 0;
+        }
+        .subdiv{
+            border: none;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+        .msg{
+            margin: auto;
+            border: none;
+            max-width: 300px;
+            width: fit-content;
+            word-wrap: break-word;
+            background-color: rgb(38,131,245);
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        .msg span{
+            color: white;
+        }
+        .msg p{
+            color: white;
+        }
     </style>
+    <script type="application/javascript" src="/static/socket.io.min.js"></script>
 </head>
 <body>
 <h1>Welcome</h1>
@@ -32,6 +71,7 @@
 <button id="chat">聊天室</button>
 <br><br>
 <div id="main"></div>
+<script type="application/javascript" src="/static/chat.js"></script>
 <script type="application/javascript" src="/static/seller.js"></script>
 </body>
 </html>
